@@ -33,7 +33,8 @@ function BottomTabs({ navigation, route }: Iprops): JSX.Element {
     const tabState = navigation.getState().routes[0].state;
     const tabName = tabState?.routes[tabState.index as number].name;
     navigation.setOptions({
-      headerTitle: TAB_TITLE_MAP[tabName as keyof typeof TAB_TITLE_MAP],
+      headerTitle:
+        TAB_TITLE_MAP[tabName as keyof typeof TAB_TITLE_MAP] || '首页',
     });
   }, [navigation, route]);
 

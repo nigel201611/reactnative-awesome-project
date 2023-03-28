@@ -1,43 +1,68 @@
-import Carousel from 'react-native-snap-carousel';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import Carousel, {
+  AdditionalParallaxProps,
+  ParallaxImage,
+  Pagination,
+} from 'react-native-snap-carousel';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { useState } from 'react';
 import { viewportWidth, wp, hp } from '@utils/index';
+import { CarouselItemType } from '@config/types';
+import { useContext } from 'react';
+import { observer } from 'mobx-react';
+import { rootContext } from '@utils/index';
+
+import rootStore from '@models/index';
 
 const sliderWrapWidth = viewportWidth;
 const itemWidth = wp(90) + wp(2) * 2;
+const sliderHeight = hp(20);
+function Mypagination({
+  data,
+  activeIndex,
+}: {
+  data: CarouselItemType[];
+  activeIndex: number;
+}) {
+  return (
+    <View style={styles.paginationWrapper}>
+      <Pagination
+        containerStyle={styles.paginationContainer}
+        dotContainerStyle={styles.dotContainer}
+        dotStyle={styles.dot}
+        activeDotIndex={activeIndex}
+        dotsLength={data.length}
+        inactiveDotScale={0.7}
+        inactiveDotOpacity={0.4}
+      />
+    </View>
+  );
+}
 
-const sliderHeight = hp(26);
-
-export default function MyCarousel() {
+function MyCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const carouselItems = [
-    {
-      title: 'Item 1',
-      text: 'Text 1',
-    },
-    {
-      title: 'Item 2',
-      text: 'Text 2',
-    },
-    {
-      title: 'Item 3',
-      text: 'Text 3',
-    },
-    {
-      title: 'Item 4',
-      text: 'Text 4',
-    },
-    {
-      title: 'Item 5',
-      text: 'Text 5',
-    },
-  ];
-  const renderItem = ({ item }: { item: { title: string; text: string } }) => {
+  const { carousels } = useContext(rootContext);
+  const carouselItems = carousels && carousels.items;
+  rootStore.carousels.setItems([]);
+  const renderItem = (
+    { item }: { item: { title: string; url?: string } },
+    parallaxProps?: AdditionalParallaxProps,
+  ) => {
     return (
       <View style={styles.slider}>
-        <Text style={styles.title}>{item.title}</Text>
+        <ParallaxImage
+          source={{ uri: item.url }}
+          containerStyle={styles.imgContainer}
+          parallaxFactor={0.4}
+          spinnerColor="rgba(0,0,0,0.25)"
+          style={styles.image}
+          {...parallaxProps}
+        />
       </View>
     );
+  };
+
+  const snapToItem = (index: number) => {
+    setActiveIndex(index);
   };
 
   return (
@@ -49,8 +74,12 @@ export default function MyCarousel() {
           sliderWidth={sliderWrapWidth}
           itemWidth={itemWidth}
           renderItem={renderItem}
-          onSnapToItem={index => setActiveIndex(index)}
+          onSnapToItem={snapToItem}
+          hasParallaxImages={true}
         />
+        <Mypagination
+          data={carouselItems}
+          activeIndex={activeIndex}></Mypagination>
       </View>
     </SafeAreaView>
   );
@@ -58,23 +87,53 @@ export default function MyCarousel() {
 
 const styles = StyleSheet.create({
   sliderwrap: {
-    backgroundColor: 'rebeccapurple',
     marginBottom: 50,
   },
   slidercontent: {
+    position: 'relative',
+    marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 50,
-    marginBottom: 50,
   },
   slider: {
-    backgroundColor: 'floralwhite',
     borderRadius: 5,
     height: sliderHeight,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  imgContainer: {
+    width: itemWidth,
+    height: sliderHeight,
+    borderRadius: 8,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
+  },
+  paginationWrapper: {
+    position: 'absolute',
+    bottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  paginationContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    paddingHorizontal: 3,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  dotContainer: {
+    marginHorizontal: 6,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
   },
   title: {
     fontSize: 30,
   },
 });
+
+export default observer(MyCarousel);

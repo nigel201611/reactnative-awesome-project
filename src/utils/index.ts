@@ -1,4 +1,8 @@
 import { Dimensions } from 'react-native';
+import { createContext } from 'react';
+import { StoreType } from '@config/types';
+
+const rootContext = createContext<StoreType>({ carousels: { items: [] } });
 
 const { width: viewportWidth, height: viewportHeight } =
   Dimensions.get('window');
@@ -14,4 +18,4 @@ function hp(percentagge: number) {
   return Math.round(value);
 }
 
-export { viewportWidth, viewportHeight, wp, hp };
+export { viewportWidth, viewportHeight, rootContext, wp, hp };

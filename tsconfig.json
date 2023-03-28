@@ -9,6 +9,7 @@
       "@models/*": ["models/*"],
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
+      "@config/*": ["config/*"],
       "@mock/*": ["mock/*"]
     }
   }
