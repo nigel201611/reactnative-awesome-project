@@ -4,14 +4,11 @@ import Carousel, {
   Pagination,
 } from 'react-native-snap-carousel';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { viewportWidth, wp, hp } from '@utils/index';
 import { CarouselItemType } from '@config/types';
-import { useContext } from 'react';
 import { observer } from 'mobx-react';
-import { rootContext } from '@utils/index';
-
-import rootStore from '@models/index';
+import useStore from '../../hooks/useStore';
 
 const sliderWrapWidth = viewportWidth;
 const itemWidth = wp(90) + wp(2) * 2;
@@ -40,9 +37,10 @@ function Mypagination({
 
 function MyCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { carousels } = useContext(rootContext);
-  const carouselItems = carousels && carousels.items;
-  rootStore.carousels.setItems([]);
+  const { carouselItems, setCarouselItems } = useStore('homeStore');
+  useEffect(() => {
+    setCarouselItems([]);
+  }, [carouselItems.length]);
   const renderItem = (
     { item }: { item: { title: string; url?: string } },
     parallaxProps?: AdditionalParallaxProps,

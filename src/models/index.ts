@@ -1,3 +1,3 @@
-import carousels from './carousel';
+import homeStore from './homeModel';
 
-export default { carousels };
+export default { homeStore };
