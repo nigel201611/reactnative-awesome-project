@@ -22,7 +22,13 @@ export default function HomeTabs() {
         tabBarActiveTintColor: '#f86442',
         tabBarInactiveTintColor: '#333333',
       }}>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Home"
+        options={{
+          tabBarLabel: '推荐',
+        }}
+        component={HomeScreen}
+      />
     </Tab.Navigator>
   );
 }

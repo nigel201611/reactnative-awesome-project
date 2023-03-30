@@ -85,7 +85,7 @@ function MyCarousel() {
 
 const styles = StyleSheet.create({
   sliderwrap: {
-    marginBottom: 50,
+    // marginBottom: 5,
   },
   slidercontent: {
     position: 'relative',

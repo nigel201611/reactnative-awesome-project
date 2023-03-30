@@ -1,5 +1,5 @@
 import { RootStackNavigation } from '@navigator/index';
-import { Text, View, Button } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import MyCarousel from './MyCarousel';
 import Guess from './Guess';
 interface Iprops {
@@ -7,11 +7,17 @@ interface Iprops {
 }
 function HomeScreen({ navigation }: Iprops): JSX.Element {
   return (
-    <View>
+    <ScrollView>
       <MyCarousel></MyCarousel>
       <Guess></Guess>
-    </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  homeWrap: {
+    // overflow: 'auto',
+  },
+});
 
 export default HomeScreen;
